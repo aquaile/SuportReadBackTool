@@ -13,7 +13,7 @@ public class BaseFunction : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		learn_input_field();
+		init();
 	}
 	
 	// Update is called once per frame
@@ -25,6 +25,18 @@ public class BaseFunction : MonoBehaviour {
 		//値の挿入
 		width = (float)Screen.currentResolution.width;
 		height = (float)Screen.currentResolution.height;
+		set_size(width, height); //editor領域の指定
+	}
+
+	//editor領域のサイズを指定する関数
+	void set_size(float w, float h){
+		//引数で渡された画面サイズをもとにeditor領域のサイズを設定
+		float window_w = (w * 2.0F) / 3.0F;
+		float window_h = h;
+
+		//設定したeditor領域のサイズに変更
+		Vector2 window_size = new Vector2(window_w, window_h);
+		input_field.GetComponent<RectTransform>().sizeDelta = window_size;
 	}
 
 	void learn_input_field(){
