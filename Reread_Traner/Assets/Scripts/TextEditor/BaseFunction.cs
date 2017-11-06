@@ -23,9 +23,12 @@ public class BaseFunction : MonoBehaviour {
 	//初期設定
 	void init(){
 		//値の挿入
-		width = (float)Screen.currentResolution.width;
-		height = (float)Screen.currentResolution.height;
+		//width = (float)Screen.currentResolution.width;
+		//height = (float)Screen.currentResolution.height;
+		width = (float)Screen.width;
+		height = (float)Screen.height;
 		set_size(width, height); //editor領域の指定
+		set_type(); //編集領域の詳細な設定
 	}
 
 	//editor領域のサイズを指定する関数
@@ -39,7 +42,10 @@ public class BaseFunction : MonoBehaviour {
 		input_field.GetComponent<RectTransform>().sizeDelta = window_size;
 	}
 
-	void learn_input_field(){
-		input_field.asteriskChar = "$!£%&*"[0];
+	//editorの設定を定義
+	void set_type(){
+		input_field.GetComponent<InputField>().lineType = InputField.LineType.MultiLineNewline; //改行あり
+		input_field.GetComponent<InputField>().contentType = InputField.ContentType.Standard; //全ての文字入力可
+		input_field.GetComponent<InputField>().transition = InputField.Transition.None; //インラタクティブなし
 	}
 }
