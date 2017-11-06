@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TypeEnviron : SupportType {
 
+	Canvas EffectCanvas;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -12,5 +14,9 @@ public class TypeEnviron : SupportType {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	void initialize(Canvas canvas){
+		EffectCanvas = canvas;
 	}
 }
