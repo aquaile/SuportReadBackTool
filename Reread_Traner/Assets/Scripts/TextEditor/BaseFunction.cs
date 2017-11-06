@@ -48,4 +48,14 @@ public class BaseFunction : MonoBehaviour {
 		input_field.GetComponent<InputField>().contentType = InputField.ContentType.Standard; //全ての文字入力可
 		input_field.GetComponent<InputField>().transition = InputField.Transition.None; //インラタクティブなし
 	}
+
+	//テキストの変更を検知
+	public void OnValueChanged(){
+		Debug.Log("OnValue：" + input_field.text);
+	}
+
+	//テキストの確定を検知
+	public void EndEdit(){
+		Debug.Log("EndEdit：" + input_field.text);
+	}
 }
