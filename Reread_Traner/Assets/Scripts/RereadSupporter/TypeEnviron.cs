@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TypeEnviron : SupportType {
 
-	Canvas EffectCanvas;
+	public Canvas EffectCanvas;
 
 	// Use this for initialization
 	void Start () {
@@ -16,7 +16,8 @@ public class TypeEnviron : SupportType {
 		
 	}
 
-	void initialize(Canvas canvas){
-		EffectCanvas = canvas;
+	//視線誘導に用いるオブジェクトを配置
+	void set_object(){
+		
 	}
 }

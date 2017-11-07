@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TypeFilter : SupportType {
 
+	public Canvas EffectCanvas;
+
 	// Use this for initialization
 	void Start () {
 		
