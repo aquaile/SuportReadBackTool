@@ -68,7 +68,11 @@ public class TypeEnviron : SupportType {
 
 	//点滅アニメーションによる視線誘導
 	void mode_signal(int col, int row){
-		effects[col,row].SetActive(false);
+		bool flag = effects[col,row].activeSelf;
+		int interval = 20;
+		if(Time.frameCount % interval == 0){
+			effects[col,row].SetActive(!flag);
+		}
 	}
 
 	GameObject[,] trans_dimensions(int n, GameObject[] obj){
