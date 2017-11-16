@@ -61,12 +61,12 @@ public class TypeEnviron : SupportType {
 		effects = trans_dimensions(2, temp);
 	}
 
-	//回転アニメーションによる視線誘導
+	//回転アニメーションによる視線誘導（縦横場所指定）
 	void mode_rotate(int col, int row){
 		effects[col,row].transform.Rotate(0.0f, 0.0f, EFFECT_VELOCITY);
 	}
 
-	//点滅アニメーションによる視線誘導
+	//点滅アニメーションによる視線誘導（縦横場所）
 	void mode_signal(int col, int row){
 		bool flag = effects[col,row].activeSelf;
 		int interval = 20;
