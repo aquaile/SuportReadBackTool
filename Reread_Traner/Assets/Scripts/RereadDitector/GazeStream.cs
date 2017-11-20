@@ -25,7 +25,7 @@ public class GazeStream : MonoBehaviour {
 	void Update () {
 		for (int i=0; i<100; i++) {
 			if (num >= gaze_data.getRowCount()-1) {
-				Debug.Log("check all data");
+				//Debug.Log("check all data");
 				break;
 			}
 			px = gaze_data.getFloat(num, 0);

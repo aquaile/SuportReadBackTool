@@ -77,19 +77,21 @@ public class BaseFunction : MonoBehaviour {
 		int indent = 0; //編集位置までの改行回数をカウントする
 		int num = 0; //編集位置までに費やす文字数
 		int temp_row = 0; //文字列が要する行数を一時的に格納する変数
+		Debug.Log(caret);
 		Debug.Log(text.Length);
 		for(int i=0; i<text.Length; i++){
 			num = text[i].Length;
 			if( num < caret ){
 				//numがcaretより小さい場合
+				Debug.Log("ここって通ってる？");
 				caret = caret - ( num + 1 ); //caretを文字数分引く
 				temp_row = Mathf.CeilToInt( num / char_num ); //要した行数を計算
 				indent = indent + temp_row;
 			}else{
 				if( caret > char_num ){
 					//caretが一行あたりの文字数をオーバーした場合
+					indent = indent + caret / char_num; //行数を計算
 					caret = caret % char_num; //横からの文字数を計算
-					indent = indent + caret / char_num + 1; //行数を計算
 					break;
 				}else{
 					//caretが一行あたりの文字数をオーバーしなかった場合

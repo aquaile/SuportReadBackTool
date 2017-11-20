@@ -52,7 +52,7 @@ public class RereadDetector
         if (raw_data != null)
         {
             //必要なデータの取得ができた場合
-            Debug.Log(proc_data.Count + "：" + PIVOT);
+            //Debug.Log(proc_data.Count + "：" + PIVOT);
             write_data = new List<Gaze>();
             float cx, cy, cts; //注目点
             float cd; //角度
@@ -102,7 +102,7 @@ public class RereadDetector
                 if (isShort(cx, cy, cts, nx, ny, nts)) short_read++; //短い読み返しをカウント
                 if (isLong(cx, cy, cts, nx, ny, nts)) long_read++; //長い読み返しをカウント
             }
-            Debug.Log("短い読み返し：" + short_read + ", 長い読み返し：" + long_read);
+            //Debug.Log("短い読み返し：" + short_read + ", 長い読み返し：" + long_read);
         }
     }
 
