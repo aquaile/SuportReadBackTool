@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//視線の観測と読み返しのカウントを司るクラス
+
 public class GazeStream : MonoBehaviour {
 
 	LoadCSV gaze_data;
