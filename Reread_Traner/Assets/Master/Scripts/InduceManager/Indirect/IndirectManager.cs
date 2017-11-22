@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IndirectManager : MonoBehaviour {
 
-	public Canvas DirectCanvas; //実際に操作するCanvas
+	public Canvas IndirectCanvas; //実際に操作するCanvas
 	public int NUM = 8; //視線誘導を行う物体の数
 	public GameObject Element; //視線誘導を行う物体
 	private GameObject[,] Elements; //視線誘導を行う物体を格納する変数
@@ -17,7 +17,7 @@ public class IndirectManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		SetElements(NUM);
+		SetElement(NUM);
 	}
 	
 	// Update is called once per frame
@@ -26,7 +26,7 @@ public class IndirectManager : MonoBehaviour {
 	}
 
 	//視線誘導に用いるオブジェクトを配置
-	void SetElements(int num){
+	void SetElement(int num){
 		float width = (float)Screen.width; //実機の横幅
 		float height = (float)Screen.height; //実機の縦幅
 		float posX = ( width * 5.0F ) / 12.0F; //誘導体のx座標
@@ -36,7 +36,7 @@ public class IndirectManager : MonoBehaviour {
 		for( int col=0; col<2; col++ ){
 			for( int i=0; i<num; i++ ){
 				GameObject prefab = (GameObject)Instantiate(Element); //prefabにElementを指定してインスタンス化
-				prefab.transform.SetParent(DirectCanvas.transform, false); //親を直接誘導用のCanvasに指定
+				prefab.transform.SetParent(IndirectCanvas.transform, false); //親を直接誘導用のCanvasに指定
 				if( col == 0 ){
 					//左側
 					prefab.GetComponent<RectTransform>().localPosition = new Vector3( posX, posY * i - posY * ( num / 2.0F ) + posY / 2.0F, 0.0F ); //配置
@@ -55,7 +55,7 @@ public class IndirectManager : MonoBehaviour {
 
 	//視線誘導用の物体を取得する
 	void GetElement(int num){
-		GameObject[] temp = GameObject.FindGameObjectsWithTag("Element");
+		GameObject[] temp = GameObject.FindGameObjectsWithTag("Indirect");
 		Elements = TransDimension(2, temp, num); //二次元配列に置換
 	}
 

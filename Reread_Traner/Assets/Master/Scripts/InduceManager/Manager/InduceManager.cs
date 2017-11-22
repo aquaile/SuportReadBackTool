@@ -10,9 +10,9 @@ using UnityEngine;
 
 public class InduceManager : MonoBehaviour {
 
-	Canvas DirectCanvas; //直接誘導用のCanvas
-	Canvas IndirectCanvas; //間接誘導用のCanvas
-	Canvas EditorCanvas; //文章作成用のCanvas
+	public Canvas DirectCanvas; //直接誘導用のCanvas
+	public Canvas IndirectCanvas; //間接誘導用のCanvas
+	public GameObject SystemManager; //文章作成用のCanvas
 	private float timelapse; //経過時間
 	private int INTERVAL = 30 + 5; //読み返し誘導のインターバル（ インターバル + 誘導の動作時間 ）
 	public int reread_type = 0; //誘導する読み返しのタイプ
