@@ -21,13 +21,14 @@ public class Calcurator{
 	//注視点処理
 	private List<GazeData> FixationSaccade(List<GazeData> data){
 		List<GazeData> result = new List<GazeData>(); //結果保存用リスト
-		List<GazeData> temp = new List<GazeData>(); //チェックしている点を格納するリスト
+		List<GazeData> temp; //チェックしている点を格納するリスト
 		float T1 = FIXATION_DIST; //minimun fixation
-		float T2 = FIXATION_DIST * 2.0F; //large fixation
+		float T2 = FIXATION_DIST * 1.5F; //large fixation
 		//処理
-		for( int i=0; i<data.Count; i+=FIXATION_NUM ){
+		for( int i=0; i<data.Count-FIXATION_NUM; i+=FIXATION_NUM ){
+			temp = new List<GazeData>();
 			//連続する4点を格納する
-			for( int j=0; j<temp.Count; j++ ){
+			for( int j=0; j<FIXATION_NUM; j++ ){
 				temp.Add(data[ i + j ]);
 			}
 			//minimun fixation 処理
@@ -35,7 +36,7 @@ public class Calcurator{
 				//large fixation 処理
 				int count = 0; //確認済みデータの個数
 				int consecutive = 0; //連続数
-				while( consecutive < 3 ){
+				while( consecutive == 3 ){
 					if( LargeFixation( temp, data[i + FIXATION_NUM + count], T2 ) ){
 						temp.Add(data[i + FIXATION_NUM + count]);
 						count++;
@@ -50,6 +51,7 @@ public class Calcurator{
 				i+=count;
 			}else{
 				for( int j=0; j<temp.Count; j++){
+					if( i + j > data.Count - 1 ){ break; }
 					result.Add( new GazeData( data[ i + j ].posX, data[ i + j ].posY, data[ i + j ].timelapse ) );
 				}
 			}
@@ -110,7 +112,7 @@ public class Calcurator{
 			float Norm = GetNorm( data[i].posX, data[i].posY, data[ i + 1 ].posX, data[ i + 1 ].posY );
 			float Velocity = GetVelocity( Norm, data[i].timelapse, data[ i + 1 ].timelapse );
 			float Degree = GetDegree( data[i].posX, data[i].posY, data[ i + 1 ].posX, data[ i + 1 ].posY );
-			SettledData.Add( new GazeData( data[i].posX, data[i].posY, data[i].timelapse, Degree, Norm, Velocity ) );
+			result.Add( new GazeData( data[i].posX, data[i].posY, data[i].timelapse, Degree, Norm, Velocity ) );
 		}
 		return result;
 	}
