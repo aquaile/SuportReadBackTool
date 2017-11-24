@@ -79,7 +79,6 @@ public class Detector{
 		List<GazeData> temp = GetData();
 		List<GazeData> write = DetectWrite(temp);
 		for( int i=0; i<write.Count-1; i++ ){
-			Debug.Log(write[i].timelapse);
 			if( isShort( write[i].posX, write[i].posY, write[i].timelapse, write[i+1].posX, write[i+1].posY, write[i+1].timelapse ) ) Short++;
 			if( isLong( write[i].posX, write[i].posY, write[i].timelapse, write[i+1].posX, write[i+1].posY, write[i+1].timelapse ) ) Long++;
 		}

@@ -35,8 +35,6 @@ public class GazeManager : MonoBehaviour {
 				Long = Count[1];
 				Debug.Log(Short + "：" + Long);
 				isCalc = true;
-			}else{
-				
 			}
 		}else{
 			isCalc = false;

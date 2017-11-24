@@ -74,11 +74,15 @@ public class IndirectManager : MonoBehaviour {
 	void MotionManage(int type, int col, int row){
 		if( type == 0 ){
 			//回転
-			Rotate(col, row);
+			if( col != -1 && row != -1 ){
+				Rotate(col, row);
+			}
 		}
 		else if( type == 1 ){
 			//点滅
-			Flush(col, row);
+			if( col != -1 && row != -1 ){
+				Flush(col, row);
+			}
 		}
 	}
 

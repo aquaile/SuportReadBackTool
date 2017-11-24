@@ -46,7 +46,13 @@ public class DirectManager : MonoBehaviour {
 		if( type == 0 ){
 			//通常
 			for( int i=0; i<num; i++ ){
-				Elements[ ( Elements.Length - 1 ) - ( row + i ) ].SetActive(false);
+				if( num != -1 ){
+					Elements[ ( Elements.Length - 1 ) - ( row + i ) ].SetActive(false);
+				}else{
+					for( int j=0; j<Elements.Length; j++ ){
+						Elements[j].SetActive(true);
+					}
+				}
 			}
 		}else{
 
