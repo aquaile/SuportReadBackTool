@@ -31,7 +31,7 @@ public class DirectManager : MonoBehaviour {
 		for( int i=0; i<rows; i++ ){
 			GameObject prefab = (GameObject)Instantiate(Element); //prefabにElementを指定してインスタンス化
 			prefab.transform.SetParent(DirectCanvas.transform, false); //親を直接誘導用のCanvasに指定
-			prefab.GetComponent<RectTransform>().localPosition = new Vector3( 0.0F, i * FontSize - height / 2.0F, 0.0F ); //配置
+			prefab.GetComponent<RectTransform>().localPosition = new Vector3( 0.0F, i * FontSize - height / 2.0F + FontSize / 2.0F , 0.0F ); //配置
 			prefab.name = "row_" + i;
 		}
 
@@ -44,14 +44,15 @@ public class DirectManager : MonoBehaviour {
 
 	void FilterManage(int type, int row, int num){
 		if( type == 0 ){
-			//通常
-			for( int i=0; i<num; i++ ){
-				if( num != -1 ){
+			if( num != -1 ){
+				//通常
+				for( int i=0; i<num; i++ ){
 					Elements[ ( Elements.Length - 1 ) - ( row + i ) ].SetActive(false);
-				}else{
-					for( int j=0; j<Elements.Length; j++ ){
-						Elements[j].SetActive(true);
-					}
+				}	
+			}else{
+				//無効
+				for( int j=0; j<Elements.Length; j++ ){
+					Elements[j].SetActive(true);
 				}
 			}
 		}else{
