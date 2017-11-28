@@ -38,6 +38,15 @@ public class Detector{
 		return result;
 	}
 
+    //全ての視線データを取得する
+    public List<GazeData> GetDataList(){
+        List<GazeData> temp = new List<GazeData>();
+        for( int i=0; i<Data.Count; i++ ){
+            temp.Add(Data[i]);
+        }
+        return temp;
+    }
+
 	//書き取り検出
 	List<GazeData> DetectWrite(List<GazeData> data){
 		List<GazeData> result = new List<GazeData>();

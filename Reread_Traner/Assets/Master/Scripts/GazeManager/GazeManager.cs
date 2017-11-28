@@ -53,6 +53,12 @@ public class GazeManager : MonoBehaviour {
 		}
 	}
 
+	//保存用の視線データを取得
+	public List<GazeData> GetSaveData(){
+		List<GazeData> data = detect.GetDataList();
+		return data;
+	}
+
 	void Setup(){
 		Width = (float)Screen.width;
 		Height = (float)Screen.height;
