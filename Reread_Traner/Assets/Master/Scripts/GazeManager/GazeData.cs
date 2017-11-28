@@ -8,14 +8,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public struct GazeData{
-	public float posX { get; set; } //視線x座標
-	public float posY { get; set; }  //視線y座標
-	public float timelapse { get; set; }  //視線タイムスタンプ
-	public float degree { get; set; }  //視線タイムスタンプ
-	public float norm { get; set; }  //視線タイムスタンプ
-	public float velocity { get; set; }  //視線タイムスタンプ
+	public float posX; //視線x座標
+	public float posY; //視線y座標
+	public float timelapse; //視線タイムスタンプ
+	public float degree; //視線タイムスタンプ
+	public float norm; //視線タイムスタンプ
+	public float velocity; //視線タイムスタンプ
 
 	//コンストラクタ（属性無し）
 	public GazeData(float _posX, float _posY, float _timelapse){

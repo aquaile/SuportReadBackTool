@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System;
 
 public class DataManager : MonoBehaviour {
 
@@ -28,7 +29,7 @@ public class DataManager : MonoBehaviour {
 		Short = 10;
 		Long = 5;
 		Timelapse = 100.0F;
-		Name = "Test_Gaze";
+		Name = "Test_Data";
 		gm = GazeManager.GetComponent<GazeManager>();
 	}
 	
@@ -52,11 +53,9 @@ public class DataManager : MonoBehaviour {
 		file.Close();
 		sd = JsonUtility.FromJson<SaveData>(JSON);
 		yield return new WaitForSeconds(10);
-		if( sd != null ){
-			Debug.Log("Gaze Data Count：" + sd.Article);
-		}else{
-			Debug.Log("無理だー");
-		}
+		Debug.Log("Gaze Data Count：" + sd.Gaze.Count);
+		Debug.Log(sd.Gaze[0].posX + "：" + sd.Gaze[0].posY);
+		Debug.Log("Save Data Article\n" + sd.Article);
 	}
 
 	//ストリーミングアセットのデータリストを表示する
@@ -79,7 +78,7 @@ public class DataManager : MonoBehaviour {
 		binaryFormatter.Serialize(file, JSON);
 		file.Close();
 		yield return new WaitForSeconds(5);
-		Debug.Log("Save Data Article\n" + sd.Article);
+		//Debug.Log("Save Data Article\n" + sd.Article);
 	}
 
 	//セーブする情報をクラスに保存する
@@ -95,7 +94,7 @@ public class DataManager : MonoBehaviour {
 	}
 }
 
-[SerializeField]
+[Serializable]
 public class SaveData{
 	public string Article; //記事内容
 	public int Short; //短い読み返しの回数
