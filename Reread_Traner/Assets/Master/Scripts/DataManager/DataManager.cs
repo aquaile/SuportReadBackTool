@@ -7,15 +7,16 @@ using System;
 
 public class DataManager : MonoBehaviour {
 
-	public string Path;
-	public string Article;
-	public int Short;
-	public int Long;
-	public float Timelapse;
-	public string Name;
-	public List<GazeData> Data;
-	GazeManager gm;
-	public GameObject GazeManager;
+	public string Path; //保存ファイルまでのパス
+	public string Article; //内容
+	public int Short; //短い読み返し
+	public int Long; //長い読み返し
+	public float Timelapse; //経過時間
+	public string Name; //ファイル名
+	public List<GazeData> Data; //視線データ
+	GazeManager gm; //関数を起動するため
+	public GameObject GazeManager; //GazeMangerを動かしているゲームオブジェクトを取得
+	List<GazeData> PreviousData; //ロードした視線データを保管する
 
 	// Use this for initialization
 	void Start () {
@@ -52,7 +53,7 @@ public class DataManager : MonoBehaviour {
 		string JSON = (string) binaryFormatter.Deserialize(file);
 		file.Close();
 		sd = JsonUtility.FromJson<SaveData>(JSON);
-		yield return new WaitForSeconds(10);
+		yield return new WaitForSeconds(5);
 		Debug.Log("Gaze Data Count：" + sd.Gaze.Count);
 		Debug.Log(sd.Gaze[0].posX + "：" + sd.Gaze[0].posY);
 		Debug.Log("Save Data Article\n" + sd.Article);
