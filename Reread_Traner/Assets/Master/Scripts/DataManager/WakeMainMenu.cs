@@ -14,7 +14,7 @@ public class WakeMainMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if( Input.GetKeyDown(KeyCode.Space) ){
+		if( Input.GetKeyDown(KeyCode.Tab) ){
 			MainMenu.SetActive(!isActive);
 			isActive = !isActive;
 		}

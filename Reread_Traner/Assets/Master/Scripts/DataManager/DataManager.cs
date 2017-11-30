@@ -24,7 +24,7 @@ public class DataManager : MonoBehaviour {
 	}
 
 	//テストデータをセットする
-	void Init(){
+	public void Init(){
 		Path = "SentenceFiles";
 		Article = "ぎゃああああああああああああああああああす。\nばああああああああああああああああああああああ。";
 		Short = 10;
@@ -37,15 +37,14 @@ public class DataManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if( Time.frameCount == 100 ){
-			Data = gm.GetSaveData();
-			StartCoroutine(Save(Path, Name));
+			//StartCoroutine(Save(Path, Name));
 			StartCoroutine(Load(Path, Name));
 			LoadList(Path);
 		}
 	}
 
 	//ストリーミングアセットからデータをロードする
-	IEnumerator Load(string Path, string Name){
+	public IEnumerator Load(string Path, string Name){
 		string FilePath = Application.dataPath + "/StreamingAssets/" + Path + "/" + Name + ".json";
 		SaveData sd = new SaveData();
 		BinaryFormatter binaryFormatter = new BinaryFormatter();
@@ -70,7 +69,9 @@ public class DataManager : MonoBehaviour {
 	}
 
 	//ストリーミングアセットにデータをセーブする
-	IEnumerator Save(string Path, string Name){
+	public IEnumerator Save(string Path, string Name){
+		Data = gm.GetSaveData();
+		yield return null;
 		string FilePath = Application.dataPath + "/StreamingAssets/" + Path + "/" + Name + ".json";
 		SaveData sd = SetData(Article, Short, Long, Timelapse, Name, Data);
 		string JSON = JsonUtility.ToJson(sd);
@@ -79,7 +80,7 @@ public class DataManager : MonoBehaviour {
 		binaryFormatter.Serialize(file, JSON);
 		file.Close();
 		yield return new WaitForSeconds(5);
-		//Debug.Log("Save Data Article\n" + sd.Article);
+		Debug.Log("セーブが完了しました");
 	}
 
 	//セーブする情報をクラスに保存する
