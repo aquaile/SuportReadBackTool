@@ -17,6 +17,10 @@ public class DataManager : MonoBehaviour {
 	GazeManager gm; //関数を起動するため
 	public GameObject GazeManager; //GazeMangerを動かしているゲームオブジェクトを取得
 	List<GazeData> PreviousData; //ロードした視線データを保管する
+	public GameObject InduceManager;
+	InduceManager im;
+	public GameObject EditorManager;
+	EditorManager em;
 
 	// Use this for initialization
 	void Start () {
@@ -30,16 +34,18 @@ public class DataManager : MonoBehaviour {
 		Short = 10;
 		Long = 5;
 		Timelapse = 100.0F;
-		Name = "Test_Data";
+		Name = "Test_Date";
 		gm = GazeManager.GetComponent<GazeManager>();
+		im = InduceManager.GetComponent<InduceManager>();
+		em = EditorManager.GetComponent<EditorManager>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if( Time.frameCount == 100 ){
 			//StartCoroutine(Save(Path, Name));
-			StartCoroutine(Load(Path, Name));
-			LoadList(Path);
+			//StartCoroutine(Load(Path, Name));
+			//LoadList(Path);
 		}
 	}
 
@@ -53,19 +59,30 @@ public class DataManager : MonoBehaviour {
 		file.Close();
 		sd = JsonUtility.FromJson<SaveData>(JSON);
 		yield return new WaitForSeconds(5);
+		//他のやつを帰る
+		im.Long = sd.Long;
+		im.Short = sd.Short;
+		im.timelapse = sd.Timelapse;
+		gm.Short = sd.Long;
+		gm.Long = sd.Short;
+		em.EditCanvas.text = sd.Article;
+		//ここのやつを返る
+		Name = sd.FileName;
+		Long = sd.Long;
+		Short = sd.Short;
+		Article = sd.Article;
+		Timelapse = sd.Timelapse;
 		Debug.Log("Gaze Data Count：" + sd.Gaze.Count);
 		Debug.Log(sd.Gaze[0].posX + "：" + sd.Gaze[0].posY);
 		Debug.Log("Save Data Article\n" + sd.Article);
 	}
 
 	//ストリーミングアセットのデータリストを表示する
-	void LoadList(string Path){
+	public FileInfo[] LoadList(string Path){
 		string FilePath = Application.dataPath + "/StreamingAssets/" + Path + "/";
 		DirectoryInfo directory = new DirectoryInfo(FilePath);
 		FileInfo[] info = directory.GetFiles("*.json");
-		foreach( FileInfo data in info ){
-			Debug.Log("File Name：" + data);
-		}
+		return info;
 	}
 
 	//ストリーミングアセットにデータをセーブする

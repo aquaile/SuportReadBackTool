@@ -9,6 +9,7 @@ public class SaveManager : MonoBehaviour {
 	DataManager dm;
 	Button Save;
 	public GameObject SavePanel;
+	public InputField NameField;
 
 	// Use this for initialization
 	void Start () {
@@ -23,7 +24,8 @@ public class SaveManager : MonoBehaviour {
 	}
 
 	void OnClicked(){
-		Debug.Log(dm.Short);
-		StartCoroutine( dm.Save( dm.Path, dm.Name ) );
+		string name = NameField.text;
+		Debug.Log(name);
+		StartCoroutine( dm.Save( dm.Path, name ) );
 	}
 }

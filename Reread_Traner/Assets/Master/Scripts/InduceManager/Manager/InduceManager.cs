@@ -13,7 +13,7 @@ public class InduceManager : MonoBehaviour {
 	public Canvas DirectCanvas; //直接誘導用のCanvas
 	public Canvas IndirectCanvas; //間接誘導用のCanvas
 	public GameObject SystemManager; //文章作成用のCanvas
-	private float timelapse; //経過時間
+	public float timelapse; //経過時間
 	private int INTERVAL = 55 + 5; //読み返し誘導のインターバル（ インターバル + 誘導の動作時間 ）
 	public int reread_type = 0; //誘導する読み返しのタイプ
 	public int induce_type = 0; //読み返し誘導のタイプ
