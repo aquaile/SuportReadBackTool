@@ -19,18 +19,20 @@ public class EditorManager : MonoBehaviour {
 	public InputField EditCanvas; //文章編集エリアの取得
 	private int char_num; //一行あたりの文字数
 	private float font_size; //フォントサイズ
-	public float ElapsedTime = 0.0F; //時間経過の取得
+	public float timelapse = 0.0F; //時間経過の取得
 	public Vector2 EditPosition = new Vector2(0.0F, 0.0F); //編集位置を保存する変数
 	public int SentenceCount = 0; //文章の数を保存する変数
+	GameObject timer; //一箇所で管理されている時間を格納するための変数
 
 	// Use this for initialization
 	void Start () {
 		init(); //諸々の設定を全て初期化
+		timer = GameObject.FindGameObjectsWithTag("timer")[0];
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		ElapsedTime += Time.deltaTime; //経過時間を計算
+		timelapse = timer.GetComponent<TimeKeeper>().timelapse;
 	}
 
 	//エディターの縦横やパラメータの詳細設定を初期化

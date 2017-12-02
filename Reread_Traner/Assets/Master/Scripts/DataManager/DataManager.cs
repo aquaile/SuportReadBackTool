@@ -17,10 +17,9 @@ public class DataManager : MonoBehaviour {
 	GazeManager gm; //関数を起動するため
 	public GameObject GazeManager; //GazeMangerを動かしているゲームオブジェクトを取得
 	List<GazeData> PreviousData; //ロードした視線データを保管する
-	public GameObject InduceManager;
-	InduceManager im;
 	public GameObject EditorManager;
 	EditorManager em;
+	GameObject timer; //一箇所で管理されている時間を格納するための変数
 
 	// Use this for initialization
 	void Start () {
@@ -30,51 +29,41 @@ public class DataManager : MonoBehaviour {
 	//テストデータをセットする
 	public void Init(){
 		Path = "SentenceFiles";
-		Article = "ぎゃああああああああああああああああああす。\nばああああああああああああああああああああああ。";
-		Short = 10;
-		Long = 5;
-		Timelapse = 100.0F;
-		Name = "Test_Date";
 		gm = GazeManager.GetComponent<GazeManager>();
-		im = InduceManager.GetComponent<InduceManager>();
 		em = EditorManager.GetComponent<EditorManager>();
+		timer = GameObject.FindGameObjectsWithTag("timer")[0];
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if( Time.frameCount == 100 ){
-			//StartCoroutine(Save(Path, Name));
-			//StartCoroutine(Load(Path, Name));
-			//LoadList(Path);
-		}
+
 	}
 
 	//ストリーミングアセットからデータをロードする
 	public IEnumerator Load(string Path, string Name){
 		string FilePath = Application.dataPath + "/StreamingAssets/" + Path + "/" + Name + ".json";
 		SaveData sd = new SaveData();
-		BinaryFormatter binaryFormatter = new BinaryFormatter();
+		//BinaryFormatter binaryFormatter = new BinaryFormatter();
 		FileStream file = File.Open(FilePath, FileMode.Open);
-		string JSON = (string) binaryFormatter.Deserialize(file);
+		//string JSON = (string) binaryFormatter.Deserialize(file);
+		StreamReader sr = new StreamReader(file);
+		string JSON = sr.ReadToEnd();
+		Debug.Log(JSON);
 		file.Close();
 		sd = JsonUtility.FromJson<SaveData>(JSON);
 		yield return new WaitForSeconds(5);
-		//他のやつを帰る
-		im.Long = sd.Long;
-		im.Short = sd.Short;
-		im.timelapse = sd.Timelapse;
-		gm.Short = sd.Long;
-		gm.Long = sd.Short;
-		em.EditCanvas.text = sd.Article;
-		//ここのやつを返る
+		//このScriptの保存用データをそれぞれ書き換える
 		Name = sd.FileName;
 		Long = sd.Long;
 		Short = sd.Short;
 		Article = sd.Article;
 		Timelapse = sd.Timelapse;
-		Debug.Log("Gaze Data Count：" + sd.Gaze.Count);
-		Debug.Log(sd.Gaze[0].posX + "：" + sd.Gaze[0].posY);
-		Debug.Log("Save Data Article\n" + sd.Article);
+		//他のScriptにロードしたデータを書き込む
+		timer.GetComponent<TimeKeeper>().timelapse = Timelapse;
+		gm.Short = Short;
+		gm.Long = Long;
+		em.EditCanvas.text = Article;
+		Debug.Log("ロードが完了しました");
 	}
 
 	//ストリーミングアセットのデータリストを表示する
@@ -88,13 +77,20 @@ public class DataManager : MonoBehaviour {
 	//ストリーミングアセットにデータをセーブする
 	public IEnumerator Save(string Path, string Name){
 		Data = gm.GetSaveData();
+		Short = gm.Short;
+		Long = gm.Long;
+		Timelapse = timer.GetComponent<TimeKeeper>().timelapse;
+		Article = em.EditCanvas.text;
 		yield return null;
 		string FilePath = Application.dataPath + "/StreamingAssets/" + Path + "/" + Name + ".json";
 		SaveData sd = SetData(Article, Short, Long, Timelapse, Name, Data);
 		string JSON = JsonUtility.ToJson(sd);
 		BinaryFormatter binaryFormatter = new BinaryFormatter();
 		FileStream file = File.Create(FilePath);
-		binaryFormatter.Serialize(file, JSON);
+		StreamWriter ws = new StreamWriter(file);
+		ws.WriteLine(JSON);
+		ws.Flush();
+		//binaryFormatter.Serialize(file, JSON);
 		file.Close();
 		yield return new WaitForSeconds(5);
 		Debug.Log("セーブが完了しました");

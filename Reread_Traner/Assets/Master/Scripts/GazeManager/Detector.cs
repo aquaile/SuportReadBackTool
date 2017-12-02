@@ -85,6 +85,8 @@ public class Detector{
 
 	//読み返し検出
 	public int[] RereadCount(){
+        Short = 0;
+        Long = 0;
 		List<GazeData> temp = GetData();
 		List<GazeData> write = DetectWrite(temp);
 		for( int i=0; i<write.Count-1; i++ ){

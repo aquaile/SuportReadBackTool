@@ -5,7 +5,7 @@ using UnityEngine;
 public class GazeManager : MonoBehaviour {
 
 	Detector detect = new Detector(); //読み返し検出器
-	public float timelaple = 0.0F; //経過時間
+	float timelapse = 0.0F; //経過時間
 	float Width; //編集領域の横幅
 	float Height; //編集領域の縦幅
 	float testX; //x座標
@@ -16,23 +16,25 @@ public class GazeManager : MonoBehaviour {
 	LoadCSV csv; //CSVを読み込むクラス
 	string Path = "yamaura"; //読み込むCSVファイルまでのパス
 	bool isCalc = false; //計算中の判定
+	GameObject timer; //一箇所で管理されている時間を格納するための変数
 
 	// Use this for initialization
 	void Start () {
 		Setup();
+		timer = GameObject.FindGameObjectsWithTag("timer")[0];
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		timelaple += Time.deltaTime;
+		timelapse = timer.GetComponent<TimeKeeper>().timelapse;
 		testX = TransValue(csv.getFloat( Time.frameCount, 0 ), 0);
 		testY = TransValue(csv.getFloat( Time.frameCount, 1 ), 1);
-		detect.UpdateGazeData(testX, testY, timelaple);
-		if( (int)timelaple % 10 == 0){
+		detect.UpdateGazeData(testX, testY, timelapse);
+		if( (int)timelapse % 10 == 0){
 			if( !isCalc ){
 				Count = detect.RereadCount();
-				Short = Count[0];
-				Long = Count[1];
+				Short += Count[0];
+				Long += Count[1];
 				Debug.Log(Short + "：" + Long);
 				isCalc = true;
 			}

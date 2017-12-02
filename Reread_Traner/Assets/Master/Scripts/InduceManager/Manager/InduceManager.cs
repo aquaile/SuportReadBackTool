@@ -13,7 +13,7 @@ public class InduceManager : MonoBehaviour {
 	public Canvas DirectCanvas; //直接誘導用のCanvas
 	public Canvas IndirectCanvas; //間接誘導用のCanvas
 	public GameObject SystemManager; //文章作成用のCanvas
-	public float timelapse; //経過時間
+	float timelapse; //経過時間
 	private int INTERVAL = 55 + 5; //読み返し誘導のインターバル（ インターバル + 誘導の動作時間 ）
 	public int reread_type = 0; //誘導する読み返しのタイプ
 	public int induce_type = 0; //読み返し誘導のタイプ
@@ -28,15 +28,17 @@ public class InduceManager : MonoBehaviour {
 	int Width; //実機の横幅
 	bool isInduce = false; //判定を60秒に入った1回目だけ行う
 	bool isSettled = false; //判定を60秒に入った1回目だけ行う
+	GameObject timer; //一箇所で管理されている時間を格納するための変数
 
 	// Use this for initialization
 	void Start () {
 		Width = (int)Screen.width;
+		timer = GameObject.FindGameObjectsWithTag("timer")[0];
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		timelapse += Time.deltaTime; //経過時間を計算する
+		timelapse = timer.GetComponent<TimeKeeper>().timelapse;
 		//一定時間ごとに読み返しの制御を発火　<-　今後、編集状況に反応できるように修正する
 		if( (int)timelapse % INTERVAL == 0 ){
 			if( !isInduce ){
