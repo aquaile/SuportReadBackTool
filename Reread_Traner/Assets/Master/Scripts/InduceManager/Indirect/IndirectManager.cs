@@ -63,7 +63,7 @@ public class IndirectManager : MonoBehaviour {
 		GameObject[,] temp = new GameObject[n, num]; //結果を返すゲームオブジェクトの二次元配列
 		for( int i=0; i<n; i++ ){
 			for( int j=0; j<num; j++ ){
-				temp[ i, j ] = Elements[ i * num + 1 ];
+				temp[ i, j ] = Elements[ i * num + j ];
 			}
 		}
 		return temp;

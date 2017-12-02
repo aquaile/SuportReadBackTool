@@ -78,14 +78,14 @@ public class InduceManager : MonoBehaviour {
 		if( reread_type == 2 ){
 			//直接的誘導
 			if( induce_type == 0 ){
-				Row = 7;
-				Num = 2;
+				Row = 0;
+				Num = 3;
 				DirectCanvas.GetComponent<DirectManager>().Row = Row;
 				DirectCanvas.GetComponent<DirectManager>().Num = Num;
 			}
 			//間接的誘導
 			else if( induce_type == 1 ){
-				Row = 7;
+				Row = 0;
 				Col = 1;
 				IndirectCanvas.GetComponent<IndirectManager>().Row = Row;
 				IndirectCanvas.GetComponent<IndirectManager>().Col = Col;
