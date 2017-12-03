@@ -14,7 +14,7 @@ public class InduceManager : MonoBehaviour {
 	public Canvas IndirectCanvas; //間接誘導用のCanvas
 	public GameObject SystemManager; //文章作成用のCanvas
 	float timelapse; //経過時間
-	private int INTERVAL = 55 + 5; //読み返し誘導のインターバル（ インターバル + 誘導の動作時間 ）
+	private int INTERVAL = 25 + 5; //読み返し誘導のインターバル（ インターバル + 誘導の動作時間 ）
 	public int reread_type = 0; //誘導する読み返しのタイプ
 	public int induce_type = 0; //読み返し誘導のタイプ
 	public int Short;
@@ -44,7 +44,8 @@ public class InduceManager : MonoBehaviour {
 			if( !isInduce ){
 				Debug.Log( "Induce" );
 				reread_type = collateInduce( Short, Long, SentenceCount, timelapse );
-				actInduce( /* reread_type */ 2 , induce_type, EditPosition );
+				Debug.Log( "読み返しパターン：" + reread_type );
+				actInduce( reread_type , induce_type, EditPosition );
 				isInduce = true;
 			}
 		}else if( (int)timelapse % ( INTERVAL ) == 5 ){
@@ -61,12 +62,15 @@ public class InduceManager : MonoBehaviour {
 
 	//読み返し誘導の条件判定（短い読み返し, 長い読み返し, 文章数, 経過時間）
 	int collateInduce(int short_reread, int long_reread, int sentence_count, float timelapse){
-		float short_coefficient = 0.0F; //モデル化した短い読み返しの傾向から読み返しの有無を計算する式の係数
-		float long_coefficient = 0.0F; //モデル化した長い読み返しの傾向から読み返しの有無を計算する式の係数
-		int ideal_short_reread = ( int )( short_coefficient * timelapse ); //経過時間から理想的な短い読み返しの回数を計算
+		//y = -0.015x^2 + 1.700x - 2.350
+		int x = ( int )( timelapse / INTERVAL ) ;
+		int ideal_short_reread = ( int )( -0.015F * x * x + 1.700F * x - 2.350F ); //経過時間から理想的な短い読み返しの回数を計算
 		//int ideal_short_reread = ( int )( short_coefficient * sentence_count ); //文章数から理想的な短い読み返しの回数を計算
-		int ideal_long_reread = ( int )( long_coefficient * timelapse ); //経過時間から理想的な長い読み返しの回数を計算
+		//y = 0.003x^2 + 0.100x - 1.000
+		int ideal_long_reread = ( int )( -0.003F * x * x + 0.100F * x - 1.000F ); //経過時間から理想的な長い読み返しの回数を計算
 		//int ideal_long_reread = ( int )( long_coefficient * sentence_count ); //文章数から理想的な長い読み返しの回数を計算
+		Debug.Log("長い読み返し：" + ideal_long_reread);
+		Debug.Log("短い読み返し：" + ideal_short_reread);
 		if( long_reread < ideal_long_reread ){ return 2; } //長い読み返しの回数が理想値より少なかった場合に視線誘導
 		else if( short_reread < ideal_short_reread ){ return 1; } //短い読み返しの回数が理想値より少なかった場合に視線誘導
 		else { return 0; } //短い読み返しと長い読み返しが共に理想値を超えていた場合に視線誘導を行わない
@@ -79,7 +83,7 @@ public class InduceManager : MonoBehaviour {
 			//直接的誘導
 			if( induce_type == 0 ){
 				Row = 0;
-				Num = 3;
+				Num = 5;
 				DirectCanvas.GetComponent<DirectManager>().Row = Row;
 				DirectCanvas.GetComponent<DirectManager>().Num = Num;
 			}
@@ -95,14 +99,14 @@ public class InduceManager : MonoBehaviour {
 		else if( reread_type == 1 ){
 			//直接的誘導
 			if( induce_type == 0 ){
-				Row = (int)position.y % FontSize;
+				Row = (int) position.y / FontSize;
 				Num = 1;
 				DirectCanvas.GetComponent<DirectManager>().Row = Row;
 				DirectCanvas.GetComponent<DirectManager>().Num = Num;
 			}
 			//間接的誘導
 			else if( induce_type == 1 ){
-				Row = (int)position.y % FontSize;
+				Row = (int)position.y / FontSize;
 				Col = ( position.x > Width / 2 ) ? 0 : 1;
 				IndirectCanvas.GetComponent<IndirectManager>().Row = Row;
 				IndirectCanvas.GetComponent<IndirectManager>().Col = Col;
