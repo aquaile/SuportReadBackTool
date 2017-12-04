@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//Tobii関連設定
+//using Tobii.Gamimg;
 public class GazeManager : MonoBehaviour {
 
 	Detector detect = new Detector(); //読み返し検出器
@@ -17,6 +18,10 @@ public class GazeManager : MonoBehaviour {
 	string Path = "yamaura"; //読み込むCSVファイルまでのパス
 	bool isCalc = false; //計算中の判定
 	GameObject timer; //一箇所で管理されている時間を格納するための変数
+
+	//Tobii関連の記述
+	//private GazePoint _lastHandledPoint = GazePoint.Invalid;
+	//private GazePoint _endPoint;
 
 	// Use this for initialization
 	void Start () {
@@ -42,6 +47,23 @@ public class GazeManager : MonoBehaviour {
 			isCalc = false;
 		}
 	}
+
+	//Tobiiから視線データを取得 + Modelへのデータ送信
+	/*
+	void GetAndSave(){
+		IEnumerable<GazePoint> pointsSinceHandled = Tobii.GetGazePointsSince(_lastHandledPoint);
+		foreach(GazePoint point ini pointsSinceHandled){
+			Vector2 gp = point.Screen;
+			float ts = point.Timestamp;
+			_endPoint = point;
+			//ここを後々書き換えたい
+			testX = gp.x;
+			testY = gp.y;
+			timelapse = timer.GetComponent<TimeKeeper>().timelapse;
+		}
+		_lastHandledPoint = _endPoint;
+	}
+	*/
 
 	//テストデータを変換
 	float TransValue(float value, int type){

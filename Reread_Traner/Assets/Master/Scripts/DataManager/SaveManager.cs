@@ -27,5 +27,6 @@ public class SaveManager : MonoBehaviour {
 		string name = NameField.text;
 		Debug.Log(name);
 		StartCoroutine( dm.Save( dm.Path, name ) );
+		StartCoroutine( dm.PostJSON() );
 	}
 }

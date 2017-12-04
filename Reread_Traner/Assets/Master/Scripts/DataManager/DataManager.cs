@@ -96,6 +96,27 @@ public class DataManager : MonoBehaviour {
 		Debug.Log("セーブが完了しました");
 	}
 
+	//PHPにJSONをpostする
+	public IEnumerator PostJSON(){
+		string Path = "http://fukuchi.nkmr.io/study/test.php"; //アクセス先
+		List<GazeData> _data = gm.GetSaveData();
+		int _short = gm.Short;
+		int _long = gm.Long;
+		float _timelapse = timer.GetComponent<TimeKeeper>().timelapse;
+		string _text = em.EditCanvas.text;
+		WWWForm form = new WWWForm();
+		yield return null;
+		SaveData _savedata = SetData(Article, Short, Long, Timelapse, Name, Data);
+		string _json = JsonUtility.ToJson(_savedata);
+		yield return null;
+		form.AddField( "json", _json );
+		WWW post = new WWW( Path, form );
+		yield return post;
+		if( post != null ){
+			Debug.Log( post.text );
+		}
+	}
+
 	//セーブする情報をクラスに保存する
 	SaveData SetData(string _article, int _short, int _long, float _timelapse, string _name, List<GazeData> _gaze){
 		SaveData data = new SaveData();
