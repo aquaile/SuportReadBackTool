@@ -9,7 +9,7 @@ public class LoadManager : MonoBehaviour {
 
 	public GameObject dataManager; //データをむにゃむにゃする
 	DataManager dm;
-	Button Load;
+	Button Loadbtn;
 	public GameObject LoadPanel;
 	public GameObject Content;
 	public GameObject Toggle;
@@ -17,15 +17,18 @@ public class LoadManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		dm = dataManager.GetComponent<DataManager>();
-		Load = LoadPanel.transform.Find("Load").GetComponent<Button>();
-		Load.onClick.AddListener(OnClicked);
+		Loadbtn = LoadPanel.transform.Find("Load").GetComponent<Button>();
+		Loadbtn.onClick.AddListener(OnClicked);
 		FileInfo[] files = dm.LoadList(dm.Path);
+		char[] split_chars = {'/'}; //文章のSplit対象文字群
+		string[] directory; //ファイル一覧を保持する変数
 		foreach(FileInfo info in files ){
 			GameObject prefab = (GameObject)Instantiate(Toggle); //prefabにElementを指定してインスタンス化
 			prefab.transform.SetParent(Content.transform, false); //親を直接誘導用のCanvasに指定
 			prefab.GetComponent<Toggle>().group = Content.GetComponent<ToggleGroup>();
-			char[] split_chars = {'/'}; //文章のSplit対象文字群
-			string[] directory = info.FullName.Split(split_chars);
+			
+			// パスからファイル名だけを取り出す
+			directory = info.FullName.Split(split_chars);
 			string name = directory[directory.Length-1];
 			name = name.Replace(".json", "");
 			prefab.transform.Find("Label").GetComponent<Text>().text = name;

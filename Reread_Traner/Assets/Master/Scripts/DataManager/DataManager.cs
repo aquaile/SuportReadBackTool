@@ -8,30 +8,27 @@ using System;
 public class DataManager : MonoBehaviour {
 
 	public string Path; //保存ファイルまでのパス
-	public string Article; //内容
-	public int Short; //短い読み返し
-	public int Long; //長い読み返し
-	public float Timelapse; //経過時間
-	public string Name; //ファイル名
-	public List<GazeData> Data; //視線データ
 	GazeManager gm; //関数を起動するため
 	public GameObject GazeManager; //GazeMangerを動かしているゲームオブジェクトを取得
 	List<GazeData> PreviousData; //ロードした視線データを保管する
 	public GameObject EditorManager;
 	EditorManager em;
 	GameObject timer; //一箇所で管理されている時間を格納するための変数
+	[SerializeField]
+	SaveData TempData; //ロード時やセーブ時に結果を保存する変数
 
 	// Use this for initialization
 	void Start () {
 		Init();
 	}
 
-	//テストデータをセットする
+	//ゲームオブジェクトを取得・設定する
 	public void Init(){
 		Path = "SentenceFiles";
 		gm = GazeManager.GetComponent<GazeManager>();
 		em = EditorManager.GetComponent<EditorManager>();
 		timer = GameObject.FindGameObjectsWithTag("timer")[0];
+		TempData.Date = System.DateTime.Now.ToString("yyyy/MM/dd");
 	}
 	
 	// Update is called once per frame
@@ -41,29 +38,45 @@ public class DataManager : MonoBehaviour {
 
 	//ストリーミングアセットからデータをロードする
 	public IEnumerator Load(string Path, string Name){
-		string FilePath = Application.dataPath + "/StreamingAssets/" + Path + "/" + Name + ".json";
-		SaveData sd = new SaveData();
-		//BinaryFormatter binaryFormatter = new BinaryFormatter();
-		FileStream file = File.Open(FilePath, FileMode.Open);
-		//string JSON = (string) binaryFormatter.Deserialize(file);
+		string FilePath = Application.dataPath + "/StreamingAssets/" + Path + "/" + Name + ".json"; // 保存先Pathの設定
+		SaveData sd = new SaveData(); //セーブ用のクラスのインスタンス化
+		FileStream file = File.Open(FilePath, FileMode.Open); //保存先にファイルを開く
+
+		// JSONデータをバイナリとして保存したいときに使う奴
+		// BinaryFormatter binaryFormatter = new BinaryFormatter();
+		// string JSON = (string) binaryFormatter.Deserialize(file);
+
+		//JSONデータをそのままの形式で保存するときに使う奴
 		StreamReader sr = new StreamReader(file);
 		string JSON = sr.ReadToEnd();
-		Debug.Log(JSON);
 		file.Close();
+
+		//クラスデータのJSON化
 		sd = JsonUtility.FromJson<SaveData>(JSON);
-		yield return new WaitForSeconds(5);
+		yield return null; //一度返す
+
 		//このScriptの保存用データをそれぞれ書き換える
-		Name = sd.FileName;
-		Long = sd.Long;
-		Short = sd.Short;
-		Article = sd.Article;
-		Timelapse = sd.Timelapse;
+		TempData = DeepCopy(sd);
+
 		//他のScriptにロードしたデータを書き込む
-		timer.GetComponent<TimeKeeper>().timelapse = Timelapse;
-		gm.Short = Short;
-		gm.Long = Long;
-		em.EditCanvas.text = Article;
+		timer.GetComponent<TimeKeeper>().timelapse = TempData.Timelapse;
+		gm.Short = TempData.Short;
+		gm.Long = TempData.Long;
+		em.EditCanvas.text = TempData.Article;
 		Debug.Log("ロードが完了しました");
+	}
+
+	// SaveDataクラスをディープコピーする
+	SaveData DeepCopy(SaveData obj){
+		SaveData copy = new SaveData();
+		copy.FileName = obj.FileName;
+		copy.Article = obj.Article;
+		copy.Gaze = obj.Gaze;
+		copy.Long = obj.Long;
+		copy.Short = obj.Short;
+		copy.Timelapse = obj.Timelapse;
+		copy.Date = obj.Date;
+		return copy;
 	}
 
 	//ストリーミングアセットのデータリストを表示する
@@ -76,14 +89,15 @@ public class DataManager : MonoBehaviour {
 
 	//ストリーミングアセットにデータをセーブする
 	public IEnumerator Save(string Path, string Name){
-		Data = gm.GetSaveData();
-		Short = gm.Short;
-		Long = gm.Long;
-		Timelapse = timer.GetComponent<TimeKeeper>().timelapse;
-		Article = em.EditCanvas.text;
+		TempData.Gaze = gm.GetSaveData(); //視線データの取得
+		TempData.Short = gm.Short; //短い読み返しの取得
+		TempData.Long = gm.Long; //長い読み返しの取得
+		TempData.Timelapse = timer.GetComponent<TimeKeeper>().timelapse;
+		TempData.Article = em.EditCanvas.text;
+		TempData.FileName = Name;
 		yield return null;
 		string FilePath = Application.dataPath + "/StreamingAssets/" + Path + "/" + Name + ".json";
-		SaveData sd = SetData(Article, Short, Long, Timelapse, Name, Data);
+		SaveData sd = SetData(TempData);
 		string JSON = JsonUtility.ToJson(sd);
 		BinaryFormatter binaryFormatter = new BinaryFormatter();
 		FileStream file = File.Create(FilePath);
@@ -99,14 +113,10 @@ public class DataManager : MonoBehaviour {
 	//PHPにJSONをpostする
 	public IEnumerator PostJSON(){
 		string Path = "http://fukuchi.nkmr.io/study/test.php"; //アクセス先
-		List<GazeData> _data = gm.GetSaveData();
-		int _short = gm.Short;
-		int _long = gm.Long;
-		float _timelapse = timer.GetComponent<TimeKeeper>().timelapse;
-		string _text = em.EditCanvas.text;
+		SaveData temp = new SaveData();
 		WWWForm form = new WWWForm();
 		yield return null;
-		SaveData _savedata = SetData(Article, Short, Long, Timelapse, Name, Data);
+		SaveData _savedata = SetData(TempData);
 		string _json = JsonUtility.ToJson(_savedata);
 		yield return null;
 		form.AddField( "json", _json );
@@ -118,14 +128,15 @@ public class DataManager : MonoBehaviour {
 	}
 
 	//セーブする情報をクラスに保存する
-	SaveData SetData(string _article, int _short, int _long, float _timelapse, string _name, List<GazeData> _gaze){
+	SaveData SetData(SaveData obj){
 		SaveData data = new SaveData();
-		data.Article = _article;
-		data.Short = _short;
-		data.Long = _long;
-		data.Timelapse = _timelapse;
-		data.FileName = _name;
-		data.Gaze = _gaze;
+		data.Article = obj.Article;
+		data.Short = obj.Short;
+		data.Long = obj.Long;
+		data.Timelapse = obj.Timelapse;
+		data.FileName = obj.FileName;
+		data.Gaze = obj.Gaze;
+		data.Date = obj.Date;
 		return data;
 	}
 }
@@ -138,4 +149,5 @@ public class SaveData{
 	public float Timelapse; //経過時間
 	public string FileName; //保存時のファイルの名前
 	public List<GazeData> Gaze; //視線データ
+	public string Date; //日付
 }

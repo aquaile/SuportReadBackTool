@@ -7,15 +7,15 @@ public class SaveManager : MonoBehaviour {
 
 	public GameObject dataManager; //データをむにゃむにゃする
 	DataManager dm;
-	Button Save;
+	Button Savebtn;
 	public GameObject SavePanel;
 	public InputField NameField;
 
 	// Use this for initialization
 	void Start () {
 		dm = dataManager.GetComponent<DataManager>();
-		Save = SavePanel.transform.Find("Save").GetComponent<Button>();
-		Save.onClick.AddListener(OnClicked);
+		Savebtn = SavePanel.transform.Find("Save").GetComponent<Button>();
+		Savebtn.onClick.AddListener(OnClicked);
 	}
 	
 	// Update is called once per frame
@@ -26,6 +26,8 @@ public class SaveManager : MonoBehaviour {
 	void OnClicked(){
 		string name = NameField.text;
 		Debug.Log(name);
+
+		//ここコルーチンするのよくないと思う
 		StartCoroutine( dm.Save( dm.Path, name ) );
 		StartCoroutine( dm.PostJSON() );
 	}
