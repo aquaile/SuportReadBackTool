@@ -34,6 +34,7 @@ public class GazeManager : MonoBehaviour {
 		timelapse = timer.GetComponent<TimeKeeper>().timelapse;
 		testX = TransValue(csv.getFloat( Time.frameCount, 0 ), 0);
 		testY = TransValue(csv.getFloat( Time.frameCount, 1 ), 1);
+		//GetAndSave();
 		detect.UpdateGazeData(testX, testY, timelapse);
 		if( (int)timelapse % 10 == 0){
 			if( !isCalc ){
@@ -60,6 +61,7 @@ public class GazeManager : MonoBehaviour {
 			testX = gp.x;
 			testY = gp.y;
 			timelapse = timer.GetComponent<TimeKeeper>().timelapse;
+			detect.UpdateGazeData(testX, testY, timelapse);
 		}
 		_lastHandledPoint = _endPoint;
 	}
