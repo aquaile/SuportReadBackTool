@@ -14,7 +14,7 @@ public class InduceManager : MonoBehaviour {
 	public Canvas IndirectCanvas; //間接誘導用のCanvas
 	public GameObject SystemManager; //文章作成用のCanvas
 	float timelapse; //経過時間
-	private int INTERVAL = 25 + 5; //読み返し誘導のインターバル（ インターバル + 誘導の動作時間 ）
+	private int INTERVAL = 25; //読み返し誘導のインターバル（ インターバル + 誘導の動作時間 ）
 	public int reread_type = 0; //誘導する読み返しのタイプ
 	public int induce_type = 0; //読み返し誘導のタイプ
 	public int Short;
@@ -26,21 +26,26 @@ public class InduceManager : MonoBehaviour {
 	public int Num; //読み返しを誘導する行数
 	int FontSize = 14; //フォントサイズ
 	int Width; //実機の横幅
+	int Height; //実機の横幅
 	bool isInduce = false; //判定を60秒に入った1回目だけ行う
 	bool isSettled = false; //判定を60秒に入った1回目だけ行う
+	public int SettledInterval = 5;
 	GameObject timer; //一箇所で管理されている時間を格納するための変数
 
 	// Use this for initialization
 	void Start () {
 		Width = (int)Screen.width;
+		Height = (int)Screen.height;
 		timer = GameObject.FindGameObjectsWithTag("timer")[0];
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		SettledInterval = GameObject.FindGameObjectsWithTag("setup")[0].GetComponent<Setting>().setting.TimeRange;
+		induce_type = GameObject.FindGameObjectsWithTag("setup")[0].GetComponent<Setting>().setting.InduceType;
 		timelapse = timer.GetComponent<TimeKeeper>().timelapse;
 		//一定時間ごとに読み返しの制御を発火　<-　今後、編集状況に反応できるように修正する
-		if( (int)timelapse % INTERVAL == 0 ){
+		if( (int)timelapse % ( INTERVAL + SettledInterval ) == 0 ){
 			if( !isInduce ){
 				Debug.Log( "Induce" );
 				reread_type = collateInduce( Short, Long, SentenceCount, timelapse );
@@ -48,7 +53,7 @@ public class InduceManager : MonoBehaviour {
 				actInduce( reread_type , induce_type, EditPosition );
 				isInduce = true;
 			}
-		}else if( (int)timelapse % ( INTERVAL ) == 5 ){
+		}else if( (int)timelapse % ( INTERVAL + SettledInterval ) == SettledInterval ){
 			if( !isSettled ){
 				Debug.Log( "Settled" );
 				Format();
@@ -106,8 +111,8 @@ public class InduceManager : MonoBehaviour {
 			}
 			//間接的誘導
 			else if( induce_type == 1 ){
-				Row = (int)position.y / FontSize;
-				Col = ( position.x > Width / 2 ) ? 0 : 1;
+				Row = 7 - (int)position.y / (Height / 8);
+				Col = ( position.x > Width / 2 - Width / 6 ) ? 1 : 0;
 				IndirectCanvas.GetComponent<IndirectManager>().Row = Row;
 				IndirectCanvas.GetComponent<IndirectManager>().Col = Col;
 			}

@@ -10,7 +10,7 @@ public class IndirectManager : MonoBehaviour {
 	private GameObject[,] Elements; //視線誘導を行う物体を格納する変数
 	public float VELOCITY = 5.0F; //視線誘導アニメーションの速度
 	private bool[] isActive; //視線誘導の点滅を制御
-	public int MotionType = 0; //誘導の種類
+	public int MotionType = 1; //誘導の種類
 	public int Col; //誘導を行う誘導体の列
 	public int Row; //誘導を行う誘導体の行
 
