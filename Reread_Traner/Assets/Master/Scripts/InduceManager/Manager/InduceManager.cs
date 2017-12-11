@@ -32,6 +32,10 @@ public class InduceManager : MonoBehaviour {
 	public int SettledInterval = 5;
 	GameObject timer; //一箇所で管理されている時間を格納するための変数
 
+	void Awake(){
+		Format();
+	}
+
 	// Use this for initialization
 	void Start () {
 		Width = (int)Screen.width;
@@ -45,7 +49,7 @@ public class InduceManager : MonoBehaviour {
 		induce_type = GameObject.FindGameObjectsWithTag("setup")[0].GetComponent<Setting>().setting.InduceType;
 		timelapse = timer.GetComponent<TimeKeeper>().timelapse;
 		//一定時間ごとに読み返しの制御を発火　<-　今後、編集状況に反応できるように修正する
-		if( (int)timelapse % ( INTERVAL + SettledInterval ) == 0 ){
+		if( (int)timelapse % ( INTERVAL + SettledInterval ) == 0 && ( int ) timelapse != 0 ){
 			if( !isInduce ){
 				Debug.Log( "Induce" );
 				reread_type = collateInduce( Short, Long, SentenceCount, timelapse );
@@ -53,9 +57,10 @@ public class InduceManager : MonoBehaviour {
 				actInduce( reread_type , induce_type, EditPosition );
 				isInduce = true;
 			}
-		}else if( (int)timelapse % ( INTERVAL + SettledInterval ) == SettledInterval ){
+		}else if( (int)timelapse % ( INTERVAL + SettledInterval ) == SettledInterval && ( int ) timelapse != SettledInterval){
 			if( !isSettled ){
 				Debug.Log( "Settled" );
+				//IndirectCanvas.GetComponent<IndirectManager>().FormatObj(Col, Row);
 				Format();
 				isSettled = true;
 			}
@@ -105,7 +110,7 @@ public class InduceManager : MonoBehaviour {
 			//直接的誘導
 			if( induce_type == 0 ){
 				Row = (int) position.y / FontSize;
-				Num = 1;
+				Num = 3;
 				DirectCanvas.GetComponent<DirectManager>().Row = Row;
 				DirectCanvas.GetComponent<DirectManager>().Num = Num;
 			}

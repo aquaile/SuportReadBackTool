@@ -7,9 +7,13 @@ using System.IO;
 
 public class Setting : MonoBehaviour {
 	public SetUpData setting = new SetUpData();
+	public OptionManager om;
+
+	void Awake(){
+		Load();
+	}
 	// Use this for initialization
 	void Start () {
-		Load();
 	}
 	
 	// Update is called once per frame
@@ -34,6 +38,10 @@ public class Setting : MonoBehaviour {
 		temp = JsonUtility.FromJson<SetUpData>(JSON);
 
 		setting = temp;
+
+		om.TimeRange = setting.TimeRange;
+		om.CorrectionLevel = setting.CorrectionLevel;
+		om.InduceType = setting.InduceType;
 		
 	}
 }

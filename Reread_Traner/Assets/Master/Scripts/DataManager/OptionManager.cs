@@ -30,8 +30,21 @@ public class OptionManager : MonoBehaviour {
 	void init(){
 		setup = GameObject.FindGameObjectsWithTag("setup")[0];
 		Quitbtn = OptionPanel.transform.Find("Quit").GetComponent<Button>();
+		TimeRageSlider.GetComponent<Slider>().value = setup.GetComponent<Setting>().setting.TimeRange;
+		if( setup.GetComponent<Setting>().setting.InduceType == 1 ){
+			Transform indirect = Content.transform.Find("Indirect");
+			indirect.GetComponent<Toggle>().isOn = true;
+			Transform direct = Content.transform.Find("Direct");
+			direct.GetComponent<Toggle>().isOn = false;
+		}else{
+			Transform indirect = Content.transform.Find("Indirect");
+			indirect.GetComponent<Toggle>().isOn = false;
+			Transform direct = Content.transform.Find("Direct");
+			direct.GetComponent<Toggle>().isOn = true;
+		}
+		CorrectionLevelSlider.GetComponent<Slider>().value = setup.GetComponent<Setting>().setting.CorrectionLevel;
 
-		ChangeSetupData();
+		//ChangeSetupData();
 
 		Quitbtn.onClick.AddListener(OnClicked);
 		TimeRageSlider.GetComponent<Slider>().onValueChanged.AddListener (delegate { TimeRangeChange ();});
@@ -47,12 +60,12 @@ public class OptionManager : MonoBehaviour {
 
 	public void TimeRangeChange(){
 		TimeRange = (int)TimeRageSlider.GetComponent<Slider>().value;
-		ChangeSetupData();
+		setup.GetComponent<Setting>().setting.TimeRange = TimeRange;
 	}
 
 	public void CorrectionLevelChange(){
 		CorrectionLevel = (int)CorrectionLevelSlider.GetComponent<Slider>().value;
-		ChangeSetupData();
+		setup.GetComponent<Setting>().setting.CorrectionLevel = CorrectionLevel;
 	}
 
 	public void InduceTypeChange(){
@@ -66,7 +79,7 @@ public class OptionManager : MonoBehaviour {
 				InduceType = 0;
 			}
 		}
-		ChangeSetupData();
+		setup.GetComponent<Setting>().setting.InduceType = InduceType;
 	}
 
 	void OnClicked(){
