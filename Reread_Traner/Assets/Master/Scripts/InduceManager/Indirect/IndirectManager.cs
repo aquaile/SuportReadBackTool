@@ -64,7 +64,7 @@ public class IndirectManager : MonoBehaviour {
 		for( int i=0; i<n; i++ ){
 			for( int j=0; j<num; j++ ){
 				temp[ i, j ] = Elements[ i * num + j ];
-				//temp[ i, j ].SetActive(false);
+				temp[ i, j ].SetActive(false);
 			}
 		}
 		return temp;
@@ -93,7 +93,9 @@ public class IndirectManager : MonoBehaviour {
 	}
 
 	public void FormatObj(int col, int row){
-		Elements[ col, row ].SetActive(false);
+		if( col != 0 && row != 0 ){
+			Elements[ col, row ].SetActive(false);
+		}
 	}
 
 	//点滅誘導

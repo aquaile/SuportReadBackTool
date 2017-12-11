@@ -60,7 +60,8 @@ public class InduceManager : MonoBehaviour {
 		}else if( (int)timelapse % ( INTERVAL + SettledInterval ) == SettledInterval && ( int ) timelapse != SettledInterval){
 			if( !isSettled ){
 				Debug.Log( "Settled" );
-				//IndirectCanvas.GetComponent<IndirectManager>().FormatObj(Col, Row);
+				IndirectCanvas.GetComponent<IndirectManager>().FormatObj(Col, Row);
+				IndirectCanvas.GetComponent<IndirectManager>().FormatObj( 7, 1 );
 				Format();
 				isSettled = true;
 			}
@@ -99,7 +100,7 @@ public class InduceManager : MonoBehaviour {
 			}
 			//間接的誘導
 			else if( induce_type == 1 ){
-				Row = 0;
+				Row = 7;
 				Col = 1;
 				IndirectCanvas.GetComponent<IndirectManager>().Row = Row;
 				IndirectCanvas.GetComponent<IndirectManager>().Col = Col;
