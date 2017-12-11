@@ -61,7 +61,7 @@ public class InduceManager : MonoBehaviour {
 			if( !isSettled ){
 				Debug.Log( "Settled" );
 				IndirectCanvas.GetComponent<IndirectManager>().FormatObj(Col, Row);
-				IndirectCanvas.GetComponent<IndirectManager>().FormatObj( 7, 1 );
+				IndirectCanvas.GetComponent<IndirectManager>().FormatObj( 1, 7 );
 				Format();
 				isSettled = true;
 			}
