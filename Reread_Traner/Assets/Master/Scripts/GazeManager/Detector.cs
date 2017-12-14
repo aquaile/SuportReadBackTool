@@ -128,7 +128,7 @@ public class Detector{
         int match_num = 0; //条件一致の個数
         int COL = 5; //同じ行での距離条件
         int ROW = 3; //上下での移動距離条件
-        float TIME = 1.5F; //行動の発生間隔に関する時間条件
+        float TIME = 1.0F; //行動の発生間隔に関する時間条件
 
         //x座標条件
         if (x1 - x2 > TEXT_SIZE * COL) match_num++;

@@ -95,6 +95,7 @@ public class DataManager : MonoBehaviour {
 		TempData.Timelapse = timer.GetComponent<TimeKeeper>().timelapse;
 		TempData.Article = em.EditCanvas.text;
 		TempData.FileName = Name;
+		TempData.CountTime = gm.ct;
 		yield return null;
 		string FilePath = Application.dataPath + "/StreamingAssets/" + Path + "/" + Name + ".json";
 		SaveData sd = SetData(TempData);
@@ -137,6 +138,7 @@ public class DataManager : MonoBehaviour {
 		data.FileName = obj.FileName;
 		data.Gaze = obj.Gaze;
 		data.Date = obj.Date;
+		data.CountTime = obj.CountTime;
 		return data;
 	}
 }
@@ -150,4 +152,5 @@ public class SaveData{
 	public string FileName; //保存時のファイルの名前
 	public List<GazeData> Gaze; //視線データ
 	public string Date; //日付
+	public List<CountTime> CountTime;
 }

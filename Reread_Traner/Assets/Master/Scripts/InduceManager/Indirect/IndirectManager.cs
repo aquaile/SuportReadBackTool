@@ -93,7 +93,7 @@ public class IndirectManager : MonoBehaviour {
 	}
 
 	public void FormatObj(int col, int row){
-		if( col != 0 && row != 0 ){
+		if( col != -1 && row != -1 ){
 			Elements[ col, row ].SetActive(false);
 		}
 	}

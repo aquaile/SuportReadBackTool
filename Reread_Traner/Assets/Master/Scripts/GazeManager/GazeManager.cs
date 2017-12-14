@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 //Tobii関連設定
 //using Tobii.Gamimg;
 public class GazeManager : MonoBehaviour {
@@ -18,6 +19,7 @@ public class GazeManager : MonoBehaviour {
 	string Path = "yamaura"; //読み込むCSVファイルまでのパス
 	bool isCalc = false; //計算中の判定
 	GameObject timer; //一箇所で管理されている時間を格納するための変数
+	public List<CountTime> ct;
 
 	//Tobii関連の記述
 	//private GazePoint _lastHandledPoint = GazePoint.Invalid;
@@ -41,6 +43,7 @@ public class GazeManager : MonoBehaviour {
 				Count = detect.RereadCount();
 				Short += Count[0];
 				Long += Count[1];
+				ct.Add(new CountTime(Short, Long, timelapse, GameObject.FindGameObjectsWithTag("Editor")[0].GetComponent<EditorManager>().SentenceCount));
 				Debug.Log(Short + "：" + Long);
 				isCalc = true;
 			}
@@ -89,5 +92,20 @@ public class GazeManager : MonoBehaviour {
 		Width = (float)Screen.width;
 		Height = (float)Screen.height;
 		csv = new LoadCSV(Path);
+	}
+}
+
+[Serializable]
+public class CountTime{
+	public int Short;
+	public int Long;
+	public float Timelapse;
+	public int SentenceCount;
+
+	public CountTime(int s, int l, float t, int sc){
+		Short = s;
+		Long = l;
+		Timelapse = t;
+		SentenceCount = sc;
 	}
 }
